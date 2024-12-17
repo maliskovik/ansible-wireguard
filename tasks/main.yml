@@ -15,3 +15,10 @@
   notify:
     - Netplan apply
     - Restart networkd
+
+- name: Configure firewall
+  ufw:
+    port: "{{ item.port }}"
+    proto: udp
+    rule: allow
+  with_items: "{{ wireguard_tunnels }}"
