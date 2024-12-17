@@ -1,4 +1,8 @@
 ---
 
-- name: Netplan reload
-  command: netplan generate && netplan apply
+- name: Netplan apply
+  command: netplan apply
+- name: Restart networkd
+  service:
+    name: systemd-networkd
+    state: restarted

@@ -12,4 +12,6 @@
     owner: root
     group: root
     mode: 0600
-  notify: Netplan reload
+  notify:
+    - Netplan apply
+    - Restart networkd

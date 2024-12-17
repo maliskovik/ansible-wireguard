@@ -4,7 +4,14 @@ network:
 {% for tunnel in wireguard_tunnels %}
     {{ tunnel.name }}:
       mode: wireguard
-      key: "{{ private_key }}"
+      key: "{{ tunnel.private_key }}"
+{% if tunnel.addresses %}
+      addresses:
+{% for address in tunnel.addresses %}
+        - {{ address }}
+      port: {{ tunnel.port }}
+{% endfor %}
+{% endif %}
 {% if tunnel.peers %}
       peers:
 {% for peer in tunnel.peers %}
