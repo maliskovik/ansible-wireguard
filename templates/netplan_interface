@@ -1,0 +1,21 @@
+---
+network:
+  tunnels:
+{% for tunnel in wireguard_tunnels %}
+    {{ tunnel.name }}:
+      mode: wireguard
+      key: "{{ wireguard_private_key_path }}/{{ tunnel.name }}"
+{% if tunnel.peers %}
+      peers:
+{% for peer in tunnel.peers %}
+        - keys:
+            public: {{ peer.public_key }}
+{% if peer.allowed_ips %}
+          allowed-ips:
+{% for allowed_ip in peer.allowed_ips %}
+            - {{ allowed_ip }}
+{% endfor %}
+{% endif %}
+{% endfor %}
+{% endif %}
+{% endfor %}

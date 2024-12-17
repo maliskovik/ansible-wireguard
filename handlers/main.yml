@@ -1,0 +1,4 @@
+---
+
+- name: Netplan reload
+  command: netplan generate && netplan apply

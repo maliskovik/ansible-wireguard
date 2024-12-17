@@ -1,0 +1,41 @@
+---
+
+- name: Install wireguard
+  apt:
+    name: wireguard
+    state: latest
+
+- name: Configure interfaces
+  template:
+    src: netplan_interface
+    dest: /etc/netplan/02-wireguard.yaml
+    owner: root
+    group: root
+    mode: 0600
+  notify: Netplan reload
+
+- name: Create wireguard configuration dir
+  file:
+    state: directory
+    path: "{{ wireguard_config_dir }}"
+    mode: 0700
+    owner: root
+    group: root
+
+- name: Create wireguard configuration dir
+  file:
+    state: directory
+    path: "{{ wireguard_private_key_path }}"
+    mode: 0700
+    owner: root
+    group: root
+
+- name: Set private keys0
+  template:
+    dest: "{{ wireguard_private_key_path }}/{{ item.name }}"
+    src: wireguard_key
+    mode: 0600
+    owner: root
+    group: root
+  with_items: "{{ wireguard_tunnels }}"
+  notify: Netplan reload
